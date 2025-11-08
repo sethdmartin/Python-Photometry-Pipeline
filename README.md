@@ -8,4 +8,5 @@ Organize science and calibration images and modify filepaths in notebook.
 Run full notebook. Resulting data product is a catalog of magnitudes for each filter for all sufficiently bright targets in view.
 
 Author: Seth Martin
+
 Contact: sethdmartin@gmail.com

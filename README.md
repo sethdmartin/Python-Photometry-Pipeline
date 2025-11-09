@@ -1,5 +1,7 @@
 Photometry Pipeline.ipynb : jupyter notebook containing code to run the photometry pipeline on raw BVR images and generate a catalog of magnitudes.
+
 sm_phot.py : custom package written to support the data pipeline with functions for image processing.
+
 BVR Photometry of NGC-7789 : report on the results of this study. Relevant information to the functions of this repository can be found in section 2.
 
 Instructions:

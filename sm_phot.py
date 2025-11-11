@@ -168,30 +168,6 @@ def roll_and_pad(image,xshift,yshift,pad_size=50):
 def stack_ims(imlist,xshifts,yshifts,path,pad_size=50,obj='',xmax_shift='none',ymax_shift='none'):
     '''
     Takes a set of images, calculates their offsets, aligns them, and stacks them to produce a single image
-
-    Parameters
-    ----------
-    imlist : TYPE
-        DESCRIPTION.
-    xshifts : TYPE
-        DESCRIPTION.
-    yshifts : TYPE
-        DESCRIPTION.
-    path : TYPE
-        DESCRIPTION.
-    pad_size : TYPE, optional
-        DESCRIPTION. The default is 50.
-    obj : TYPE, optional
-        DESCRIPTION. The default is ''.
-    xmax_shift : TYPE, optional
-        DESCRIPTION. The default is 'none'.
-    ymax_shift : TYPE, optional
-        DESCRIPTION. The default is 'none'.
-
-    Returns
-    -------
-    None.
-
     '''
     if os.path.isdir(path + 'Stacked_'+obj) == False:
             os.mkdir(path + 'Stacked_'+obj)
@@ -266,8 +242,6 @@ def bg_error_estimate(fitsfile):
     fitsdata = fits.getdata(fitsfile)
     hdr = fits.getheader(fitsfile)
     
-    # What is happening in the next step? Read the docstring for sigma_clip.
-    # Answer: removes data more than 3 sigma away from background noise
     filtered_data = sigma_clip(fitsdata, sigma=3.,copy=False)
     
     # Summarize the following steps:
@@ -305,26 +279,25 @@ def starExtractor(fitsfile, nsigma_value, fwhm_value):
         print(regionfile, "already exists in this directory. Rename or remove the .reg file and run again.")
         #return    
     
-    
-    # *** Read in the data from the fits file ***
+    #Read in the data from the fits file
     image = fits.getdata(fitsfile)
     
-    # *** Measure the median absolute standard deviation of the image: ***
+    #Measure the median absolute standard deviation of the image
     bkg_sigma = mad_std(image)
 
-    # *** Define the parameters for DAOStarFinder ***
+    #Define the parameters for DAOStarFinder
     daofind = DAOStarFinder(fwhm=fwhm_value, threshold=nsigma_value*bkg_sigma)
     
-    # Apply DAOStarFinder to the image
+    #Apply DAOStarFinder to the image
     sources = daofind(image)
     nstars = len(sources)
     print("Number of stars found in ",fitsfile,":", nstars)
     
-    # Define arrays of x-position and y-position
+    #Define arrays of x-position and y-position
     xpos = np.array(sources['xcentroid'])
     ypos = np.array(sources['ycentroid'])
     
-    # Write the positions to a .reg file based on the input file name
+    #Write the positions to a .reg file based on the input file name
     if os.path.exists(regionfile) == False:
         f = open(regionfile, 'w') 
         for i in range(0,len(xpos)):
@@ -376,4 +349,5 @@ def zpcalc(magzp, magzp_err, filtername, dataframe):
     magcalc = inst_mag + magzp
     magcalc_err = np.sqrt((magzp_err)**2 + (inst_mag_err)**2)
     dataframe[str(filtername)+'_cal'] = magcalc
+
     dataframe[str(filtername)+'cal_err'] = magcalc_err
